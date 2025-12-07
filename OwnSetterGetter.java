@@ -36,18 +36,28 @@ String className = args[0];
 Class c = Class.forName(className);
 Field f[] = c.getDeclaredFields();
 
-StringBuffer SetterTemplate = new StringBuffer();
+StringBuffer setterTemplate = new StringBuffer();
+StringBuffer getterTemplate = new StringBuffer();
+
 for(int i=0;i<f.length;i++)
 {
 String fieldName = f[i].getName();
 String fieldDataType = f[i].getType().getSimpleName();
-SetterTemplate.append("public void");
-String methodName = "get"+capitalize(fieldName);
-SetterTemplate.append(mk.argumentMaker(f[i]));
-SetterTemplate.append("\n{\n");
-SetterTemplate.append("this."+fieldName+" = "+fieldName+";\n}");
-SetterTemplate.append("\n");
+setterTemplate.append("public void ");
+setterTemplate.append("set"+capitalize(fieldName));
+setterTemplate.append(mk.argumentMaker(f[i]));
+setterTemplate.append("\n{\n");
+setterTemplate.append("this."+fieldName+" = "+fieldName+";\n}");
+setterTemplate.append("\n");
 }
-System.out.println(SetterTemplate.toString());
+
+for(int i=0;i<f.length;i++)
+{
+String fieldName = f[i].getName();
+String fieldDataType = f[i].getType().getSimpleName();
+getterTemplate.append("public "+fieldDataType+" get"+capitalize(fieldName)+"()\n{\n"+"return this."+fieldName+";\n}\n");
+}
+System.out.println(getterTemplate.toString());
+System.out.println(setterTemplate.toString());
 }
 }
